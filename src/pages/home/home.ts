@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { ImageViewerController } from 'ionic-img-viewer';
 
 @Component({
   selector: 'page-home',
@@ -8,10 +9,12 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 })
 export class HomePage {
   path: string;
+  beShow: boolean = false;
 
   constructor(
     public navCtrl: NavController,
-    public camera: Camera,
+    private camera: Camera,
+    private imageViewerCtrl: ImageViewerController
   ) {
 
   }
@@ -30,6 +33,7 @@ export class HomePage {
 
     this.camera.getPicture(options).then((imageData) => {
       // imageData is either a base64 encoded string or a file URI
+      this.beShow = true;
       console.log("got file: " + imageData);
       this.path = imageData;
 
@@ -40,4 +44,16 @@ export class HomePage {
     });
   }
 
+  /**
+   * ionic-img-viewer
+   * 支持手势任意缩放、放大后拖动查看
+   * 上/下滑推出预览。
+   *
+   * @memberof HomePage
+   */
+
+  check(imageToView: any) {
+    const viewer = this.imageViewerCtrl.create(imageToView);
+    viewer.present();
+  }
 }
